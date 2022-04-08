@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map OpenRealTime
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+RTTimer	KEYWORD1	RTTimer
+RTPwm	KEYWORD1	RTPwm
+RTButton	KEYWORD1	RTButton
+HBridge	KEYWORD1	HBridge
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+getCurrentTime	KEYWORD2
+isOver	KEYWORD2
+async_reset	KEYWORD2
+sync_reset	KEYWORD2
+set	KEYWORD2
+get	KEYWORD2
+run	KEYWORD2
+state	KEYWORD2
+previousState	KEYWORD2
+isTrigged	KEYWORD2
+update	KEYWORD2
+RTWait	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
