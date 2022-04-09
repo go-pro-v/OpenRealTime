@@ -10,6 +10,9 @@ RTTimer	KEYWORD1	RTTimer
 RTPwm	KEYWORD1	RTPwm
 RTButton	KEYWORD1	RTButton
 HBridge	KEYWORD1	HBridge
+RTWifi	KEYWORD1	RTWifi
+RTNTPClient	KEYWORD1	RTNTPClient
+RTMqtt	KEYWORD1	RTMqtt
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -21,11 +24,26 @@ sync_reset	KEYWORD2
 set	KEYWORD2
 get	KEYWORD2
 run	KEYWORD2
+start	KEYWORD2
 state	KEYWORD2
 previousState	KEYWORD2
 isTrigged	KEYWORD2
 update	KEYWORD2
 RTWait	KEYWORD2
+getWiFiClient	KEYWORD2
+publish	KEYWORD2
+subscribe	KEYWORD2
+second	KEYWORD2
+minute	KEYWORD2
+hour	KEYWORD2
+dayOfMonth	KEYWORD2
+month	KEYWORD2
+year	KEYWORD2
+dayOfWeek	KEYWORD2
+dayOfYear	KEYWORD2
+toChar	KEYWORD2
+changed	KEYWORD2
+setOffset	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
