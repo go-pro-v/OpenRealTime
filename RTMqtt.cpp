@@ -1,4 +1,5 @@
 #include <RTMqtt.h>
+RTMqtt::Topic* RTMqtt::topic_list = 0;
 RTMqtt::RTMqtt(RTWifi& wifiClient, String server, int port, String user, String password)
 {
 	mqtt_server = server;

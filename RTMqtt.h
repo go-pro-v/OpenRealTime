@@ -30,7 +30,7 @@ private:
 		Topic* next = 0;
 		void (*mqtt_callback)(String);
 	};
-	inline static Topic* topic_list = 0;
+	static Topic* topic_list;
 
 	void mqtt_reconnect();
 	static void MQTTCallback(char* topic, byte* payload, unsigned int length);
