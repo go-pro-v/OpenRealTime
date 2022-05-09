@@ -13,7 +13,8 @@
     async_reset();
   }
   RTTimer::~RTTimer(){}
-  unsigned long RTTimer::getCurrentTime(){
+
+  unsigned long RTTimer::getCurrentClock(){
     if(millisecondes){
       return millis();
     }
@@ -21,35 +22,41 @@
       return micros();
     }
   }
+
+  unsigned long RTTimer::deltaTime(unsigned long first, unsigned long second)
+  {
+    if(first <= second)
+    {
+      return second - first;
+    }
+    else
+    {
+      return first + (0xffffffff - second);
+    }
+  }
   bool RTTimer::isOver(){
-    auto currentTime = getCurrentTime();
-    return 
-    (endTime >= startTime && (currentTime >= endTime || currentTime < startTime))
-    || (endTime < startTime && currentTime < startTime && currentTime >= endTime);
+    unsigned long currentTime = getCurrentClock();
+    return deltaTime(startTime, currentTime) >= period;
   }
   void RTTimer::async_reset()
   {
-    startTime = getCurrentTime();
+    startTime = getCurrentClock();
     endTime = startTime + period;
   }
   uint8_t RTTimer::sync_reset()
   {
-    uint8_t over = 0;
     if(!isOver())
     {
       async_reset();
-      return over;
+      return 0;
     }
-    while(isOver())
+    else
     {
-      startTime = endTime;
+      unsigned long currentTime = getCurrentClock();
+      unsigned long delta = deltaTime(startTime, currentTime);
+      unsigned long offset = delta % period;
+      unsigned long cycles = (delta - offset) / period;
+      startTime += period * cycles;
       endTime = startTime + period;
-      over++;
-      if(over == 0xff)
-      {
-        init();
-        return over;
-      }
-    }
-    return over;
-  }
+      return min((unsigned long)(0xff), cycles);
+    }  }
