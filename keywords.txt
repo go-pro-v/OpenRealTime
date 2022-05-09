@@ -13,6 +13,7 @@ HBridge	KEYWORD1	HBridge
 RTWifi	KEYWORD1	RTWifi
 RTNTPClient	KEYWORD1	RTNTPClient
 RTMqtt	KEYWORD1	RTMqtt
+RTRamp	KEYWORD1	RTRamp
 
 #######################################
 # Methods and Functions (KEYWORD2)
