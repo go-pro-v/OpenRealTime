@@ -1,11 +1,13 @@
 #include "RTButton.h"
-RTButton::RTButton(uint8_t pin, bool lowState)
+RTButton::RTButton(uint8_t pin, bool lowState, int debouce)
 {
   pinInput = pin;
   pinMode(pinInput, INPUT);
   invertState = lowState;
-  static auto lastRealButtonChangeTime = millis();
-  static auto previousRealButtonState = readInput();
+  debouceValue = debouce;
+  debouceTimerTimeOut = debouceValue + 1000;
+  lastRealButtonChangeTime = millis();
+  previousRealButtonState = readInput();
 }
 
 bool RTButton::readInput()

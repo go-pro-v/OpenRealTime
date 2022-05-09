@@ -4,14 +4,14 @@
 class RTButton
 {
   public:
-  RTButton(uint8_t pin, bool lowState);
+  RTButton(uint8_t pin, bool lowState, int debouce = 10);
   void run();
   bool state();
   bool previousState();
   bool isTrigged();
   private:
-  const int debouceValue = 10;
-  const int debouceTimerTimeOut = debouceValue + 1000;
+  int debouceValue = 10;
+  int debouceTimerTimeOut = debouceValue + 1000;
   bool previousRealButtonState;
   unsigned long lastRealButtonChangeTime;
   bool currentButtonState = LOW;
