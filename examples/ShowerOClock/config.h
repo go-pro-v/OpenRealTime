@@ -8,3 +8,12 @@
 #define MQTT_PASSWORD "YOUR_MQTT_PASSWORD"
 
 #define NTP_SERVER "YOUR_NTP_SERVER"
+
+#define PIN_BUTTON 0
+#define PIN_PWM 14
+
+#define PIN_I2C_CLK 5
+#define PIN_I2C_DIO 4
+
+#define NEOPIXEL_PIN 16
+#define NEOPIXEL_NUM 24
