@@ -5,8 +5,9 @@ RTWifi::RTWifi(String ssid, String password)
 	wifi_ssid = ssid;
 	wifi_password = password;
 }
-void RTWifi::start()
+void RTWifi::start(void (*duringConnection)(),void (*duringReconnection)())
 {
+	wifi_during_reconnection = duringReconnection;
 	if (WiFi.status() != WL_CONNECTED) 
 	{
 		WiFi.begin(wifi_ssid.c_str(), wifi_password.c_str());
@@ -15,6 +16,8 @@ void RTWifi::start()
 		Serial.println(wifi_ssid.c_str());
 		while (WiFi.status() != WL_CONNECTED) 
 		{
+			yield();
+			duringConnection();
 			if(reconnectTimer.isOver())
 			{
 				reconnectTimer.sync_reset();

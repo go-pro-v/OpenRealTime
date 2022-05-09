@@ -10,7 +10,7 @@ class RTWifi
 public:
 	RTWifi(String ssid, String password);
 	void run();
-	void start();
+	void start(void (*duringConnection)() = [](){}, void (*duringReconnection)() = [](){});
 	WiFiClient& getWiFiClient();
 
 private:
@@ -20,6 +20,7 @@ private:
 	RTTimer reconnectTimer = RTTimer(500000);
 	String  wifi_ssid;
 	String  wifi_password;
+	void (*wifi_during_reconnection)();
 };
 
 #endif
