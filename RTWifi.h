@@ -12,6 +12,7 @@ public:
 	void run();
 	void start(void (*duringConnection)() = [](){}, void (*duringReconnection)() = [](){});
 	WiFiClient& getWiFiClient();
+	bool connected();
 
 private:
 	WiFiClient wifiClient;

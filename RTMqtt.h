@@ -22,6 +22,7 @@ private:
 	String mqtt_password;
 	RTTimer reconnectTimer = RTTimer(2000000);
 	bool reconnecting = false;
+	RTWifi* wifi_client;
 
 	class Topic{
 	public:

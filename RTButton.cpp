@@ -21,18 +21,32 @@ void RTButton::run()
 // gestion du bouton avec debounce
   auto currentTime = millis();
   auto currentRealButtonState = readInput();
-  
-  if(lastRealButtonChangeTime + debouceTimerTimeOut < currentTime) // ne pas laisser le timer viellir trop longtemps pour éviter un overflow trop important
+
+  if(previousRealButtonState != currentRealButtonState)
+  {
+    lastRealButtonChangeTime = currentTime;
+  }
+  // la gestion des overflow n'est pas encore parfaite, mais les cas foireux sont rares et isolés. 
+  if(
+    lastRealButtonChangeTime + debouceTimerTimeOut < currentTime
+    || (lastRealButtonChangeTime > currentTime && lastRealButtonChangeTime + debouceTimerTimeOut > currentTime)
+  ) // ne pas laisser le timer viellir trop longtemps pour éviter un overflow trop important
   {
     lastRealButtonChangeTime = currentTime - debouceTimerTimeOut;
   }
 
   previousButtonState = currentButtonState;
-  if(currentButtonState != currentRealButtonState && lastRealButtonChangeTime + debouceValue < currentTime)
+  if(currentButtonState != currentRealButtonState && 
+      (
+        lastRealButtonChangeTime + debouceValue < currentTime
+        || (lastRealButtonChangeTime > currentTime && lastRealButtonChangeTime + debouceValue > currentTime)
+      )
+    )
   {
     currentButtonState = currentRealButtonState;
   }
 
+  previousRealButtonState = currentRealButtonState;
 }
 bool RTButton::state()
 {

@@ -5,5 +5,6 @@ void RTWait(unsigned long millisecondes)
   while(!timer.isOver())
   {
     update();
+    timer.update();
   }
 }

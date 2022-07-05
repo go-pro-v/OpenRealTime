@@ -5,19 +5,26 @@ RTWifi::RTWifi(String ssid, String password)
 	wifi_ssid = ssid;
 	wifi_password = password;
 }
+bool RTWifi::connected()
+{
+	return WiFi.status() == WL_CONNECTED;
+}
 void RTWifi::start(void (*duringConnection)(),void (*duringReconnection)())
 {
 	wifi_during_reconnection = duringReconnection;
-	if (WiFi.status() != WL_CONNECTED) 
+	if (!connected()) 
 	{
 		WiFi.begin(wifi_ssid.c_str(), wifi_password.c_str());
 		Serial.println();
 		Serial.print("Connection au réseau : ");
 		Serial.println(wifi_ssid.c_str());
-		while (WiFi.status() != WL_CONNECTED) 
+		reconnectTimer.update();
+		reconnectTimer.async_reset();
+		while (!connected()) 
 		{
 			yield();
 			duringConnection();
+			reconnectTimer.update();
 			if(reconnectTimer.isOver())
 			{
 				reconnectTimer.sync_reset();
@@ -41,7 +48,10 @@ WiFiClient& RTWifi::getWiFiClient()
 }
 void RTWifi::checkWifiReconnection()
 {
-	if(!reconnecting && WiFi.status() != WL_CONNECTED) {
+	if(!reconnecting && !connected()) {
+		reconnectTimer.update();
+		reconnectTimer.async_reset();
+		wifi_during_reconnection();
 		reconnecting = true;
 		Serial.println();
 		Serial.print("Reconnection au réseau : ");
@@ -49,15 +59,17 @@ void RTWifi::checkWifiReconnection()
 		WiFi.disconnect();
 		WiFi.reconnect();
 	}
-	else if(reconnecting && WiFi.status() != WL_CONNECTED)
+	else if(reconnecting && !connected())
 	{
+		wifi_during_reconnection();
+		reconnectTimer.update();
 		if(reconnectTimer.isOver())
 		{
 			reconnectTimer.sync_reset();
 			Serial.print(".");
 		}
 	}
-	else if(reconnecting && WiFi.status() == WL_CONNECTED)
+	else if(reconnecting && connected())
 	{
 		reconnecting = false;
 		Serial.println("");

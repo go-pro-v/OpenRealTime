@@ -20,6 +20,7 @@ void RTRamp::start()
 {
   Serial.print("step : ");
   Serial.println(String((m_ms_to_max * 1000) / m_range));
+  m_step_timer.update();
   m_step_timer.async_reset();
   m_changed = true;
 }
@@ -31,6 +32,7 @@ bool RTRamp::changed()
 void RTRamp::run()
 {
   m_changed = false;
+  m_step_timer.update();
   if(m_step_timer.isOver())
   {
     auto offset = m_step_timer.sync_reset();

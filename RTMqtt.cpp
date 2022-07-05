@@ -6,12 +6,11 @@ RTMqtt::RTMqtt(RTWifi& wifiClient, String server, int port, String user, String 
 	mqtt_port = port;
 	mqtt_user = user;
 	mqtt_password = password;
+	wifi_client = &wifiClient;
 	mqttClient = PubSubClient(wifiClient.getWiFiClient());
 }
 void RTMqtt::start()
 {
-	mqttClient.setServer(mqtt_server.c_str(), mqtt_port);
-	mqttClient.setCallback(MQTTCallback);
 	mqtt_reconnect();
 }
 void RTMqtt::run()
@@ -27,7 +26,14 @@ void RTMqtt::run()
 }
 void RTMqtt::publish(String topic, String value)
 {
-		mqttClient.publish(topic.c_str(), value.c_str());
+
+	Serial.print("MQTT Publish : ");
+	Serial.print(topic);
+	Serial.print(" : ");
+	Serial.print(value);
+	Serial.println("");
+
+	mqttClient.publish(topic.c_str(), value.c_str());
 }
 void RTMqtt::subscribe(String topic,void (*callback)(String))
 {
@@ -46,8 +52,17 @@ RTMqtt::Topic::Topic(String topic, Topic* topic_list, void (*callback)(String))
 
 void RTMqtt::mqtt_reconnect()
 {
+	if(!wifi_client->connected())
+	{
+		return;
+	}
 	if(!reconnecting && !mqttClient.connected()) {
 		reconnecting = true;
+		mqttClient.disconnect();
+		mqttClient.setServer(mqtt_server.c_str(), mqtt_port);
+		mqttClient.setCallback(MQTTCallback);
+		reconnectTimer.update();
+		reconnectTimer.async_reset();
 		Serial.println("Connexion à MQTT...");
 		if (mqttClient.connect("ESP8266Client", mqtt_user.c_str(), mqtt_password.c_str()))
 		{
@@ -68,6 +83,7 @@ void RTMqtt::mqtt_reconnect()
 	}
 	else if(reconnecting && !mqttClient.connected())
 	{
+		reconnectTimer.update();
 		if(reconnectTimer.isOver())
 		{
 			reconnecting = false;
@@ -76,7 +92,7 @@ void RTMqtt::mqtt_reconnect()
 }
 void RTMqtt::MQTTCallback(char* topic, byte* payload, unsigned int length)
 {
-	Serial.print("Message reçu : ");
+	Serial.print("MQTT Get : ");
 	Serial.print(topic);
 	String message;
 

@@ -6,6 +6,9 @@ public:
   RTTimer(unsigned long microsecondes = 0);
   ~RTTimer();
   unsigned long getCurrentClock();
+  void run();
+  void update();
+  bool isTrigged();
   bool isOver();
   void async_reset();
   uint8_t sync_reset();
@@ -15,5 +18,7 @@ private:
   unsigned long endTime;
   unsigned long period;
   bool millisecondes;
+  bool trigger = false;
+  unsigned long memorised_time = 0;
 };
 #endif

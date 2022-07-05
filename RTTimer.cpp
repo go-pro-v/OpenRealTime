@@ -1,4 +1,6 @@
 #include "RTTimer.h"
+#include <limits.h>
+
   RTTimer::RTTimer(unsigned long microsecondes){
     //millisecondes = (microsecondes == 0xFFFFFED8 & microsecondes);
     millisecondes = (microsecondes == ((microsecondes / 1000) * 1000));
@@ -10,29 +12,52 @@
     {
       period = microsecondes;
     }
+    update();
     async_reset();
   }
   RTTimer::~RTTimer(){}
 
   unsigned long RTTimer::getCurrentClock(){
+    return memorised_time;
+  }
+  void RTTimer::update()
+  {
     if(millisecondes){
-      return millis();
+      memorised_time = millis();
     }
     else{
-      return micros();
+      memorised_time = micros();
     }
+  }
+  void RTTimer::run()
+  {
+    update();
+    if(isOver())
+    {
+      sync_reset();
+      trigger = true;
+    }
+    else
+    {
+      trigger = false;
+    }
+  }
+  bool RTTimer::isTrigged()
+  {
+    return trigger;
   }
 
   unsigned long RTTimer::deltaTime(unsigned long first, unsigned long second)
   {
-    if(first <= second)
+    return second - first;
+    /*if(first <= second)
     {
       return second - first;
     }
     else
     {
-      return first + (0xffffffff - second);
-    }
+      return 1 + first + (ULONG_MAX - second);
+    }*/
   }
   bool RTTimer::isOver(){
     unsigned long currentTime = getCurrentClock();
@@ -59,4 +84,5 @@
       startTime += period * cycles;
       endTime = startTime + period;
       return min((unsigned long)(0xff), cycles);
-    }  }
+    }
+  }

@@ -18,6 +18,7 @@
   }
   void RTPwm::run()
   {
+    timer.update();
     if(timer.isOver())
     {
       increment += timer.sync_reset();
