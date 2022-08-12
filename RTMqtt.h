@@ -20,7 +20,7 @@ private:
 	int mqtt_port;
 	String mqtt_user;
 	String mqtt_password;
-	RTTimer reconnectTimer = RTTimer(2000000);
+	RTTimer reconnectTimer = RTTimer(30*1000*1000);
 	bool reconnecting = false;
 	RTWifi* wifi_client;
 

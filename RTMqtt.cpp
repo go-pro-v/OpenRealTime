@@ -21,6 +21,8 @@ void RTMqtt::run()
 	}
 	else
 	{
+		reconnectTimer.update();
+		reconnectTimer.async_reset();
 		mqttClient.loop();
 	}
 }
