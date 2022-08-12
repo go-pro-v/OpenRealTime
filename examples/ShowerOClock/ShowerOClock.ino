@@ -377,12 +377,14 @@ void manageRinging()
     {
       ring_state=RingState::stopped;
       Serial.println("Stop ring");
+      mqtt.publish("clock/ringing", "0");
     }
   }
   if(ring_state==RingState::waiting && ntp.changed() && ntp.hour() == ringHour && ntp.minute() == ringMinute && ntp.second() < RING_DURATION)
   {
     ring_state=RingState::ringing;
     Serial.println("Ring");
+    mqtt.publish("clock/ringing", "1");
   }
   if(
     (ring_state==RingState::stopped || ring_state==RingState::ringing)
@@ -390,6 +392,10 @@ void manageRinging()
     && (ntp.hour() != ringHour || ntp.minute() != ringMinute || ntp.second() >= RING_DURATION)
   )
   {
+    if(ring_state==RingState::ringing)
+    {
+      mqtt.publish("clock/ringing", "0");
+    }
     ring_state=RingState::waiting;
     Serial.println("Reinit ring");
   }
