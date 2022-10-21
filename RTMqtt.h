@@ -11,7 +11,7 @@ public:
 	RTMqtt(RTWifi& wifiClient, String server, int port, String user, String password);
 	void start();
 	void run();
-	void publish(String topic, String value);
+	void publish(String topic, String value = "");
 	void subscribe(String topic, void (*callback)(String) = [](String){});
 
 private:
